@@ -196,9 +196,43 @@ public class Level {
 	//#############################################################################################################
 	//Your code goes here! 
 	//Please make sure you read the rubric/directions carefully and implement the solution recursively!
+	int i=3;
 	private void water(int col, int row, Map map, int fullness) {
-		
+		Water w = new Water(col, row, tileSize, tileset.getImage("Full_water"), this, 3);
+		Water hw = new Water(col, row, tileSize, tileset.getImage("Half_water"), this, 2);
+		Water qw = new Water(col, row, tileSize, tileset.getImage("Quarter_water"), this, 1);
+		Water fw = new Water(col, row, tileSize, tileset.getImage("Falling_water"), this, 0);
+		if(fullness==3){
+		map.addTile(col, row, w);
+		i--;
+		}else if(fullness==2){
+		map.addTile(col, row, hw);	
+		}else if(fullness==1){
+		map.addTile(col, row, qw);	
+		}
+	if(!map.getTiles()[col+1][row].isSolid()){
+		if(col+1<map.getTiles().length){
+		if(!map.getTiles()[col+1][row-1].isSolid()){
+			if(i==2){
+			i--;
+			water(col+1,row,map,2);	
+			}else if(i==1){
+			water(col+1,row,map,1);
+			}
+		}
 	}
+}
+	//if(!map.getTiles()[col-1][row].isSolid()){
+	//	if(col-1>=0){
+		//	if (i>1){
+		//	water(col-1,row,map,2);
+		//	i--;	
+		//	}else if(i==1){
+		//	water(col-1,row,map,1);
+		//	}
+	//	}
+	}
+
 
 
 
