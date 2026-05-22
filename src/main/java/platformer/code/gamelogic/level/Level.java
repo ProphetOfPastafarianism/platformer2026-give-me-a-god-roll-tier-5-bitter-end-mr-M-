@@ -198,71 +198,65 @@ public class Level {
 	//Please make sure you read the rubric/directions carefully and implement the solution recursively!
 	
 	private void water(int col, int row, Map map, int fullness) {
-		int i=fullness;
-		int k=fullness;
 		Water w = new Water(col, row, tileSize, tileset.getImage("Full_water"), this, 3);
 		Water hw = new Water(col, row, tileSize, tileset.getImage("Half_water"), this, 2);
 		Water qw = new Water(col, row, tileSize, tileset.getImage("Quarter_water"), this, 1);
 		Water fw = new Water(col, row, tileSize, tileset.getImage("Falling_water"), this, 0);
 		if(!map.getTiles()[col][row].isSolid()){
 		if(fullness==3){
-		map.addTile(col, row, w);
-		i--;
-		k--;
+			map.addTile(col, row, w);
 		}else if(fullness==2){
-		map.addTile(col, row, hw);	
-		i--;
-		k--;
+			map.addTile(col, row, hw);
+			fullness=1;	
 		}else if(fullness==1){
-		map.addTile(col, row, qw);	
-		}else{
-		map.addTile(col, row, w);
-		water(col+1, row, map, 1);	
-		}
-	}
-	if(!map.getTiles()[col+1][row].isSolid() && !(map.getTiles()[col+1][row] instanceof Water)){
-		if(col+1<map.getTiles().length){
-			if(map.getTiles()[col][row+1].isSolid()){
-			if(i==2){
-			i--;
-			water(col+1,row,map,2);	
-			}else if(i==1){
-			water(col+1,row,map,1);
-			}
-		}else{
-			if(fullness==2){
-			map.addTile(col+1, row, hw);	
-			
-			}else{
-			map.addTile(col+1, row, qw);
-			}
-			water(col,row+1,map,0);	
-		}
+			map.addTile(col, row, qw);	
+		}else if(map.getTiles()[0].length>row+2 && fullness==0 && !map.getTiles()[col][row+1].isSolid()){
+			map.addTile(col, row, fw);	
+		}else if(fullness==0 &&map.getTiles()[col][row+1].isSolid()){
+			map.addTile(col, row, w);
+			fullness=3;	
 		}
 	}
 
-	if(!map.getTiles()[col-1][row].isSolid() && !(map.getTiles()[col-1][row] instanceof Water)){
-		if(col-1>=0){
-			if(map.getTiles()[col-1][row+1].isSolid()){
-			if(k==2){
-			water(col-1,row,map,2);	
-			k--;
-			}else if(k==1){
-			water(col-2,row,map,1);
+
+	//either we fall
+	
+		if(map.getTiles()[0].length>row+1 && !map.getTiles()[col][row+1].isSolid()){
+				//some stuff to do the full block hereif()
+				if(map.getTiles()[0].length>row+2 && !map.getTiles()[col][row+2].isSolid()){
+					water(col, row+1, map, 0);
+				}else{
+					water(col, row+1, map, 0);
+				}
+				
 			}
-		}else{
-			if(fullness==2){
-			map.addTile(col-1, row, hw);	
-			map.addTile(col-1, row+1, fw);	
-			}else{
-			map.addTile(col-1, row, qw);	
-			map.addTile(col-1, row+1, fw);	
+
+	
+   
+	//or we go left and right
+	else{
+		if(col+1<map.getTiles().length && !map.getTiles()[col+1][row].isSolid() && !(map.getTiles()[col+1][row] instanceof Water)){
+			
+				
+				if(fullness>=2){
+				water(col+1,row,map,2);	
+				}else if(fullness==1){
+				water(col+1,row,map,1);
+				}
 			}
-			water(col-1,row+1,map,0);	
 		}
-	}
-	}
-}
+
+		if(col-1>=0&&!map.getTiles()[col-1][row].isSolid() && !(map.getTiles()[col-1][row] instanceof Water)){
+				if(fullness>=2){
+				water(col-1,row,map,2);	
+				
+				}else if(fullness==1){
+				water(col-1,row,map,1);
+				}
+			}
+		}
+	
+	
 
 
 
